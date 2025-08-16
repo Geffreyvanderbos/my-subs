@@ -39,59 +39,68 @@
   }
 </script>
 
-<div class="video-card">
-  <div class="thumbnail-container">
-    <img 
-      src={video.thumbnail} 
-      alt={video.title}
-      loading="lazy"
-      class="thumbnail"
-    />
-    <div class="thumbnail-overlay">
-      <div class="play-button">
-        <svg viewBox="0 0 24 24" fill="currentColor">
-          <path d="M8 5v14l11-7z"/>
-        </svg>
+<a 
+  href={video.link} 
+  target="_blank" 
+  rel="noopener noreferrer"
+  class="video-card-link"
+  aria-label="Watch {video.title} on YouTube"
+>
+  <div class="video-card">
+    <div class="thumbnail-container">
+      <img 
+        src={video.thumbnail} 
+        alt={video.title}
+        loading="lazy"
+        class="thumbnail"
+      />
+      <div class="thumbnail-overlay">
+        <div class="play-button">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M8 5v14l11-7z"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+    
+    <div class="video-info">
+      <h3 class="video-title">
+        {video.title}
+      </h3>
+      
+      <div class="video-meta">
+        <p class="channel-name">
+          <svg class="channel-icon" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+          </svg>
+          {video.channel}
+        </p>
+        
+        <p class="publish-date">
+          <svg class="date-icon" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/>
+          </svg>
+          {formatDate(video.publishDate)}
+        </p>
       </div>
     </div>
   </div>
-  
-  <div class="video-info">
-    <h3 class="video-title">
-      <a href={video.link} target="_blank" rel="noopener noreferrer">
-        {video.title}
-      </a>
-    </h3>
-    
-    <div class="video-meta">
-      <p class="channel-name">
-        <svg class="channel-icon" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-        </svg>
-        {video.channel}
-      </p>
-      
-      <p class="publish-date">
-        <svg class="date-icon" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/>
-        </svg>
-        {formatDate(video.publishDate)}
-      </p>
-    </div>
-  </div>
-</div>
+</a>
 
 <style>
-  .video-card {
-    background: var(--bg-card);
+  .video-card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
     border-radius: 30px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .video-card {
     overflow: hidden;
     transition: all 0.164s var(--card-easing);
     position: relative;
-  }
-
-  .video-card:hover {
-    box-shadow: var(--shadow-card);
   }
 
   .thumbnail-container {
@@ -103,6 +112,7 @@
   }
 
   .thumbnail {
+    border-radius: 30px;
     position: absolute;
     top: 0;
     left: 0;
@@ -112,8 +122,8 @@
     transition: transform 0.164s var(--card-easing);
   }
 
-  .video-card:hover .thumbnail {
-    transform: scale(1.01);
+  .video-card-link:hover .thumbnail {
+    transform: scale(1.02);
   }
 
   .thumbnail-overlay {
@@ -128,13 +138,13 @@
       rgba(0, 0, 0, 0.4) 100%
     );
     opacity: 0;
-    transition: opacity 0.164s ease;
+    transition: opacity 0.164s var(--card-easing);
     display: flex;
     align-items: center;
     justify-content: center;
   }
 
-  .video-card:hover .thumbnail-overlay {
+  .video-card-link:hover .thumbnail-overlay {
     opacity: 1;
   }
 
@@ -149,10 +159,10 @@
     color: var(--bg-primary);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
     transform: scale(0.8);
-    transition: transform 0.3s ease;
+    transition: transform 0.164s var(--card-easing);
   }
 
-  .video-card:hover .play-button {
+  .video-card-link:hover .play-button {
     transform: scale(1);
   }
 
@@ -171,16 +181,7 @@
     font-size: 1.1rem;
     font-weight: 600;
     line-height: 1.4;
-  }
-
-  .video-title a {
     color: var(--text-primary);
-    text-decoration: none;
-    transition: color 0.2s ease;
-  }
-
-  .video-title a:hover {
-    color: var(--accent-secondary);
   }
 
   .video-meta {
@@ -218,7 +219,7 @@
 
   /* Responsive adjustments */
   @media (max-width: 768px) {
-    .video-card {
+    .video-card-link {
       border-radius: 16px;
     }
 
@@ -242,7 +243,7 @@
   }
 
   @media (max-width: 480px) {
-    .video-card:hover {
+    .video-card-link:hover {
       transform: translateY(-4px) scale(1.01);
     }
 
