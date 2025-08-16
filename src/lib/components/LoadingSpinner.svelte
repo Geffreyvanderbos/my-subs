@@ -1,6 +1,15 @@
 <div class="loading-spinner">
-  <div class="spinner"></div>
-  <p>Loading videos...</p>
+  <div class="spinner-container">
+    <div class="spinner-ring"></div>
+    <div class="spinner-ring"></div>
+    <div class="spinner-ring"></div>
+  </div>
+  <p class="loading-text">Loading videos...</p>
+  <div class="loading-dots">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
 </div>
 
 <style>
@@ -9,27 +18,117 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 2rem;
-    color: #6b7280;
+    padding: 4rem 2rem;
+    color: var(--text-secondary);
+    min-height: 400px;
   }
 
-  .spinner {
-    width: 40px;
-    height: 40px;
-    border: 4px solid #e5e7eb;
-    border-top: 4px solid #3b82f6;
+  .spinner-container {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    margin-bottom: 2rem;
+  }
+
+  .spinner-ring {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border: 3px solid transparent;
     border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin-bottom: 1rem;
+    animation: spin 2s linear infinite;
+  }
+
+  .spinner-ring:nth-child(1) {
+    border-top-color: var(--accent-primary);
+    animation-delay: 0s;
+  }
+
+  .spinner-ring:nth-child(2) {
+    border-right-color: var(--accent-secondary);
+    animation-delay: 0.3s;
+  }
+
+  .spinner-ring:nth-child(3) {
+    border-bottom-color: var(--accent-muted);
+    animation-delay: 0.6s;
   }
 
   @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
   }
 
-  p {
-    margin: 0;
-    font-size: 1rem;
+  .loading-text {
+    margin: 0 0 1.5rem 0;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    letter-spacing: 0.02em;
+  }
+
+  .loading-dots {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .loading-dots span {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+
+  .loading-dots span:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+
+  .loading-dots span:nth-child(3) {
+    animation-delay: 0.4s;
+  }
+
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 0.3;
+      transform: scale(0.8);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .loading-spinner {
+      padding: 3rem 1rem;
+      min-height: 300px;
+    }
+
+    .spinner-container {
+      width: 60px;
+      height: 60px;
+      margin-bottom: 1.5rem;
+    }
+
+    .loading-text {
+      font-size: 1rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .spinner-container {
+      width: 50px;
+      height: 50px;
+    }
+
+    .spinner-ring {
+      border-width: 2px;
+    }
   }
 </style>

@@ -47,6 +47,13 @@
       loading="lazy"
       class="thumbnail"
     />
+    <div class="thumbnail-overlay">
+      <div class="play-button">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M8 5v14l11-7z"/>
+        </svg>
+      </div>
+    </div>
   </div>
   
   <div class="video-info">
@@ -56,26 +63,35 @@
       </a>
     </h3>
     
-    <p class="channel-name">{video.channel}</p>
-    
-    <p class="publish-date">
-      {formatDate(video.publishDate)}
-    </p>
+    <div class="video-meta">
+      <p class="channel-name">
+        <svg class="channel-icon" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+        </svg>
+        {video.channel}
+      </p>
+      
+      <p class="publish-date">
+        <svg class="date-icon" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/>
+        </svg>
+        {formatDate(video.publishDate)}
+      </p>
+    </div>
   </div>
 </div>
 
 <style>
   .video-card {
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background: var(--bg-card);
+    border-radius: 30px;
     overflow: hidden;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: all 0.164s var(--card-easing);
+    position: relative;
   }
 
   .video-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    box-shadow: var(--shadow-card);
   }
 
   .thumbnail-container {
@@ -83,6 +99,7 @@
     width: 100%;
     height: 0;
     padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    overflow: hidden;
   }
 
   .thumbnail {
@@ -92,38 +109,149 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition: transform 0.164s var(--card-easing);
+  }
+
+  .video-card:hover .thumbnail {
+    transform: scale(1.01);
+  }
+
+  .thumbnail-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      rgba(0, 0, 0, 0.4) 100%
+    );
+    opacity: 0;
+    transition: opacity 0.164s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .video-card:hover .thumbnail-overlay {
+    opacity: 1;
+  }
+
+  .play-button {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--bg-primary);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    transform: scale(0.8);
+    transition: transform 0.3s ease;
+  }
+
+  .video-card:hover .play-button {
+    transform: scale(1);
+  }
+
+  .play-button svg {
+    width: 24px;
+    height: 24px;
+    margin-left: 2px;
   }
 
   .video-info {
-    padding: 16px;
+    padding: 1.5rem;
   }
 
   .video-title {
-    margin: 0 0 8px 0;
-    font-size: 1rem;
+    margin: 0 0 1rem 0;
+    font-size: 1.1rem;
     font-weight: 600;
     line-height: 1.4;
   }
 
   .video-title a {
-    color: #1a1a1a;
+    color: var(--text-primary);
     text-decoration: none;
+    transition: color 0.2s ease;
   }
 
   .video-title a:hover {
-    color: #2563eb;
+    color: var(--accent-secondary);
+  }
+
+  .video-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .channel-name,
+  .publish-date {
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .channel-icon,
+  .date-icon {
+    width: 16px;
+    height: 16px;
+    opacity: 0.7;
   }
 
   .channel-name {
-    margin: 0 0 4px 0;
-    font-size: 0.875rem;
-    color: #6b7280;
     font-weight: 500;
+    color: var(--text-secondary);
   }
 
   .publish-date {
-    margin: 0;
-    font-size: 0.75rem;
-    color: #9ca3af;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .video-card {
+      border-radius: 16px;
+    }
+
+    .video-info {
+      padding: 1.25rem;
+    }
+
+    .video-title {
+      font-size: 1rem;
+    }
+
+    .play-button {
+      width: 50px;
+      height: 50px;
+    }
+
+    .play-button svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .video-card:hover {
+      transform: translateY(-4px) scale(1.01);
+    }
+
+    .video-info {
+      padding: 1rem;
+    }
+
+    .video-meta {
+      gap: 0.5rem;
+    }
   }
 </style>

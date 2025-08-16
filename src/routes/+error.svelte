@@ -3,8 +3,11 @@
 </script>
 
 <div class="error-page">
-  <h1>Error {$page.status}</h1>
-  <p>{$page.error?.message || 'Something went wrong'}</p>
+  <div class="error-header">
+    <div class="error-number">{$page.status}</div>
+    <h1>Something went wrong</h1>
+    <p>{$page.error?.message || 'An unexpected error occurred'}</p>
+  </div>
   
   {#if $page.status === 500}
     <div class="error-details">
@@ -19,56 +22,177 @@
     </div>
   {/if}
   
-  <a href="/" class="home-link">Go back home</a>
+  <div class="error-actions">
+    <a href="/" class="home-link">Go back home</a>
+    <button class="retry-button" on:click={() => window.location.reload()}>
+      Try again
+    </button>
+  </div>
 </div>
 
 <style>
   .error-page {
-    max-width: 600px;
+    max-width: 700px;
     margin: 4rem auto;
-    padding: 2rem;
+    padding: 3rem 2rem;
     text-align: center;
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background: var(--bg-modal);
+    border-radius: 24px;
+    box-shadow: var(--shadow-card);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--border-subtle);
+  }
+
+  .error-header {
+    margin-bottom: 3rem;
+  }
+
+  .error-number {
+    font-size: 6rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 1rem;
+    line-height: 1;
   }
 
   h1 {
-    color: #dc2626;
-    margin-bottom: 1rem;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 1rem 0;
+    letter-spacing: -0.01em;
+  }
+
+  .error-header p {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.6;
   }
 
   .error-details {
     text-align: left;
-    margin: 2rem 0;
-    padding: 1rem;
-    background: #fef2f2;
-    border-radius: 6px;
-    border: 1px solid #fecaca;
+    margin: 2rem 0 3rem 0;
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 16px;
+    border: 1px solid var(--border-subtle);
   }
 
   .error-details h2 {
-    color: #dc2626;
-    margin-top: 0;
+    color: var(--accent-secondary);
+    margin: 0 0 1rem 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+
+  .error-details p {
+    margin: 0 0 1rem 0;
+    color: var(--text-secondary);
+    line-height: 1.6;
   }
 
   .error-details ul {
     margin: 1rem 0;
     padding-left: 1.5rem;
+    color: var(--text-secondary);
+  }
+
+  .error-details li {
+    margin-bottom: 0.5rem;
+    line-height: 1.5;
+  }
+
+  .error-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .home-link,
+  .retry-button {
+    display: inline-block;
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+    font-family: inherit;
   }
 
   .home-link {
-    display: inline-block;
-    background: #3b82f6;
-    color: white;
-    padding: 0.75rem 1.5rem;
-    border-radius: 6px;
-    text-decoration: none;
-    font-weight: 600;
-    transition: background-color 0.2s ease;
+    background: var(--button-bg);
+    color: var(--bg-primary);
+    box-shadow: var(--shadow-button);
   }
 
   .home-link:hover {
-    background: #2563eb;
+    background: var(--button-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(255, 255, 255, 0.2);
+  }
+
+  .retry-button {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+    border: 1px solid var(--border-subtle);
+  }
+
+  .retry-button:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-1px);
+    border-color: var(--border-accent);
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .error-page {
+      margin: 2rem 1rem;
+      padding: 2rem 1.5rem;
+    }
+
+    .error-number {
+      font-size: 4rem;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+    }
+
+    .error-details {
+      padding: 1.5rem;
+    }
+
+    .error-actions {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .home-link,
+    .retry-button {
+      width: 100%;
+      max-width: 300px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .error-page {
+      padding: 1.5rem 1rem;
+    }
+
+    .error-number {
+      font-size: 3rem;
+    }
+
+    .error-details {
+      padding: 1rem;
+    }
   }
 </style>
