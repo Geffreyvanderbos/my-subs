@@ -92,7 +92,6 @@
     text-decoration: none;
     color: inherit;
     display: block;
-    border-radius: 30px;
     position: relative;
     overflow: hidden;
   }
@@ -120,10 +119,8 @@
     height: 100%;
     object-fit: cover;
     transition: transform 0.164s var(--card-easing);
-  }
-
-  .video-card-link:hover .thumbnail {
-    transform: scale(1.02);
+    box-sizing: border-box;
+    border: 1px solid rgba(255, 255, 255, 0.1);
   }
 
   .thumbnail-overlay {
@@ -186,8 +183,10 @@
 
   .video-meta {
     display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
   }
 
   .channel-name,
@@ -198,6 +197,19 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    flex: 1;
+  }
+
+  .channel-name {
+    font-weight: 500;
+    color: var(--text-secondary);
+    justify-content: flex-start;
+  }
+
+  .publish-date {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    justify-content: flex-end;
   }
 
   .channel-icon,
@@ -205,16 +217,6 @@
     width: 16px;
     height: 16px;
     opacity: 0.7;
-  }
-
-  .channel-name {
-    font-weight: 500;
-    color: var(--text-secondary);
-  }
-
-  .publish-date {
-    color: var(--text-muted);
-    font-size: 0.8rem;
   }
 
   /* Responsive adjustments */

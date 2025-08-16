@@ -65,14 +65,14 @@
 </script>
 
 <svelte:head>
-  <title>My YouTube - RSS Feed Reader</title>
+  <title>My Subscriptions - Privacy focused YouTube feed</title>
 </svelte:head>
 
 <nav class="navbar">
   <div class="nav-container">
     <div class="nav-brand">
-      <h1>My YouTube</h1>
-      <span class="nav-subtitle">RSS Feed Reader</span>
+      <h1>My Subscriptions</h1>
+      <span class="nav-subtitle">Privacy focused YouTube feed</span>
     </div>
     
     <button 
@@ -89,7 +89,6 @@
             <path d="M1 4v6h6M23 20v-6h-6"/>
             <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/>
           </svg>
-          <span>Refresh Feeds</span>
         {/if}
       </span>
     </button>
@@ -131,7 +130,7 @@
     position: sticky;
     top: 0;
     z-index: 1000;
-    background: rgba(10, 10, 10, 0.95);
+    background: rgba(10, 10, 10, 0.9);
     backdrop-filter: blur(20px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     padding: 1rem 0;
@@ -173,18 +172,19 @@
   }
 
   .refresh-button {
-    background: var(--button-bg);
-    color: var(--bg-primary);
-    border: none;
-    padding: 0.75rem 1.5rem;
-    border-radius: 12px;
-    font-size: 0.95rem;
-    font-weight: 600;
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text-secondary);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    padding: 0.625rem 1.25rem;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 500;
     cursor: pointer;
-    box-shadow: 0 4px 16px rgba(255, 255, 255, 0.1);
+    transition: all 0.2s ease;
     position: relative;
     overflow: hidden;
     white-space: nowrap;
+    backdrop-filter: blur(10px);
   }
 
   .refresh-button::before {
@@ -194,7 +194,7 @@
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
     transition: left 0.5s;
   }
 
@@ -203,13 +203,14 @@
   }
 
   .refresh-button:hover:not(:disabled) {
-    background: var(--button-hover);
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.18);
+    color: var(--text-primary);
     transform: translateY(-1px);
-    box-shadow: 0 6px 20px rgba(255, 255, 255, 0.15);
   }
 
   .refresh-button:disabled {
-    opacity: 0.6;
+    opacity: 0.5;
     cursor: not-allowed;
     transform: none;
   }
