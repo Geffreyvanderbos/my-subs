@@ -121,7 +121,7 @@
 </script>
 
 <svelte:head>
-  <title>My Subscriptions - Privacy focused YouTube feed</title>
+  <title>My Subscriptions - Privacy-focused, no-algorithm YouTube feed</title>
 </svelte:head>
 
 <nav class="navbar">
@@ -129,7 +129,7 @@
     <div class="nav-content">
       <div class="nav-brand">
         <h1 class="nav-title">My Subscriptions</h1>
-        <p class="nav-subtitle">The privacy focused YouTube feed</p>
+        <p class="nav-subtitle">The no-algorithm YouTube feed</p>
       </div>
       
       <div class="nav-controls">
@@ -315,7 +315,7 @@
     bottom: 0;
     background-color: rgba(255, 255, 255, 0.2);
     border-radius: 20px;
-    transition: all 0.3s ease;
+    transition: all 0.264s var(--ui-easing);
     border: 1px solid rgba(255, 255, 255, 0.1);
     display: block;
   }
@@ -326,10 +326,10 @@
     height: 16px;
     width: 16px;
     left: 2px;
-    bottom: 2px;
+    bottom: 1px;
     background-color: var(--bg-primary);
     border-radius: 50%;
-    transition: all 0.3s ease;
+    transition: all 0.264s var(--ui-easing);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   }
 
@@ -339,7 +339,7 @@
   }
 
   .toggle-input:checked + .toggle-switch:before {
-    transform: translateX(20px);
+    transform: translateX(18px);
     background-color: var(--text-primary);
   }
 
@@ -386,7 +386,6 @@
     background: rgba(255, 255, 255, 0.12);
     border-color: rgba(255, 255, 255, 0.18);
     color: var(--text-primary);
-    transform: translateY(-1px);
   }
 
   .refresh-button:disabled {

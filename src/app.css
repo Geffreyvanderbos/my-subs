@@ -30,6 +30,7 @@
   
   /* Animation easing */
   --card-easing: cubic-bezier(0.4, 0, 0.2, 1);
+  --ui-easing: cubic-bezier(0.87, 0, 0.13, 1);
 }
 
 body {
