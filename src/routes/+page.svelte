@@ -9,8 +9,14 @@
   let loading = true;
   let error: string | null = null;
   let refreshing = false;
+  let showShorts = false; // Default: hide Shorts
 
   const feedService = new FeedService();
+
+  // Computed property to filter videos based on Shorts preference
+  $: filteredVideos = showShorts 
+    ? videos 
+    : videos.filter(video => !video.link.includes('/shorts/'));
 
   async function loadVideos() {
     try {
@@ -70,28 +76,40 @@
 
 <nav class="navbar">
   <div class="nav-container">
-    <div class="nav-brand">
-      <h1>My Subscriptions</h1>
-      <span class="nav-subtitle">Privacy focused YouTube feed</span>
+    <div class="nav-content">
+      <div class="nav-brand">
+        <h1 class="nav-title">My YouTube</h1>
+        <p class="nav-subtitle">RSS Feed Reader</p>
+      </div>
+      
+      <div class="nav-controls">
+        <div class="shorts-toggle">
+          <label class="toggle-label" for="shorts-toggle">
+            Show Shorts
+          </label>
+          <div class="toggle-switch">
+            <input 
+              type="checkbox" 
+              id="shorts-toggle" 
+              bind:checked={showShorts}
+              class="toggle-input"
+            />
+            <span class="toggle-slider"></span>
+          </div>
+          <!-- span class="video-count">
+            {filteredVideos.length} of {videos.length} videos
+          </span-->
+        </div>
+        
+        <button 
+          class="refresh-button" 
+          on:click={refreshFeeds}
+          disabled={refreshing}
+        >
+          {refreshing ? 'Refreshing...' : 'Refresh'}
+        </button>
+      </div>
     </div>
-    
-    <button 
-      class="refresh-button" 
-      on:click={refreshFeeds}
-      disabled={refreshing}
-    >
-      <span class="button-content">
-        {#if refreshing}
-          <div class="spinner"></div>
-          <span>Refreshing...</span>
-        {:else}
-          <svg class="refresh-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M1 4v6h6M23 20v-6h-6"/>
-            <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/>
-          </svg>
-        {/if}
-      </span>
-    </button>
   </div>
 </nav>
 
@@ -118,7 +136,7 @@
     </div>
   {:else}
     <div class="video-grid">
-      {#each videos as video (video.link)}
+      {#each filteredVideos as video (video.link)}
         <VideoCard {video} />
       {/each}
     </div>
@@ -146,13 +164,20 @@
     gap: 2rem;
   }
 
+  .nav-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+
   .nav-brand {
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
   }
 
-  .nav-brand h1 {
+  .nav-title {
     font-size: 1.75rem;
     font-weight: 700;
     margin: 0;
@@ -169,6 +194,90 @@
     color: var(--text-muted);
     font-weight: 400;
     letter-spacing: 0.01em;
+    margin: 0;
+  }
+
+  .nav-controls {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .shorts-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+
+  .video-count {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-left: 0.5rem;
+    opacity: 0.8;
+  }
+
+  .toggle-label {
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .toggle-switch {
+    position: relative;
+    width: 40px;
+    height: 20px;
+  }
+
+  .toggle-input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 2px;
+    bottom: 2px;
+    background-color: var(--bg-primary);
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  .toggle-input:checked + .toggle-slider {
+    background-color: rgba(255, 255, 255, 0.8);
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+
+  .toggle-input:checked + .toggle-slider:before {
+    transform: translateX(20px);
+    background-color: var(--text-primary);
+  }
+
+  .toggle-switch:hover .toggle-slider {
+    background-color: rgba(255, 255, 255, 0.25);
+  }
+
+  .toggle-input:checked + .toggle-slider:hover {
+    background-color: rgba(255, 255, 255, 0.9);
   }
 
   .refresh-button {
