@@ -23,10 +23,31 @@
       
       console.log('VideoCard: Valid date object:', dateObj.toISOString());
       
-      const formatted = new Intl.DateTimeFormat('en-US', {
+      const now = new Date();
+      const diffInHours = (now.getTime() - dateObj.getTime()) / (1000 * 60 * 60);
+      
+      // Show relative time for videos published within the last 12 hours
+      if (diffInHours < 12) {
+        if (diffInHours < 1) {
+          const diffInMinutes = Math.floor((now.getTime() - dateObj.getTime()) / (1000 * 60));
+          if (diffInMinutes < 1) {
+            return 'Just now';
+          }
+          return `${diffInMinutes} minute${diffInMinutes === 1 ? '' : 's'} ago`;
+        } else {
+          const hours = Math.floor(diffInHours);
+          return `${hours} hour${hours === 1 ? '' : 's'} ago`;
+        }
+      }
+      
+      // Show full date and time for older videos (24-hour format)
+      const formatted = new Intl.DateTimeFormat('en-GB', {
         year: 'numeric',
         month: 'short',
-        day: 'numeric'
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false
       }).format(dateObj);
       
       console.log('VideoCard: Formatted date:', formatted);
