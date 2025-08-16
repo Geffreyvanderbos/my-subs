@@ -78,8 +78,8 @@
   <div class="nav-container">
     <div class="nav-content">
       <div class="nav-brand">
-        <h1 class="nav-title">My YouTube</h1>
-        <p class="nav-subtitle">RSS Feed Reader</p>
+        <h1 class="nav-title">My Subscriptions</h1>
+        <p class="nav-subtitle">The privacy focused YouTube feed</p>
       </div>
       
       <div class="nav-controls">
@@ -87,14 +87,16 @@
           <label class="toggle-label" for="shorts-toggle">
             Show Shorts
           </label>
-          <div class="toggle-switch">
+          <div class="toggle-container">
             <input 
               type="checkbox" 
               id="shorts-toggle" 
               bind:checked={showShorts}
               class="toggle-input"
             />
-            <span class="toggle-slider"></span>
+            <label class="toggle-switch" for="shorts-toggle">
+              <span class="toggle-slider"></span>
+            </label>
           </div>
           <!-- span class="video-count">
             {filteredVideos.length} of {videos.length} videos
@@ -224,19 +226,22 @@
     user-select: none;
   }
 
-  .toggle-switch {
+  .toggle-container {
     position: relative;
     width: 40px;
     height: 20px;
+    display: inline-block;
   }
 
   .toggle-input {
     opacity: 0;
     width: 0;
     height: 0;
+    position: absolute;
+    pointer-events: none;
   }
 
-  .toggle-slider {
+  .toggle-switch {
     position: absolute;
     cursor: pointer;
     top: 0;
@@ -247,9 +252,10 @@
     border-radius: 20px;
     transition: all 0.3s ease;
     border: 1px solid rgba(255, 255, 255, 0.1);
+    display: block;
   }
 
-  .toggle-slider:before {
+  .toggle-switch:before {
     position: absolute;
     content: "";
     height: 16px;
@@ -262,21 +268,21 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   }
 
-  .toggle-input:checked + .toggle-slider {
+  .toggle-input:checked + .toggle-switch {
     background-color: rgba(255, 255, 255, 0.8);
     border-color: rgba(255, 255, 255, 0.3);
   }
 
-  .toggle-input:checked + .toggle-slider:before {
+  .toggle-input:checked + .toggle-switch:before {
     transform: translateX(20px);
     background-color: var(--text-primary);
   }
 
-  .toggle-switch:hover .toggle-slider {
+  .toggle-switch:hover {
     background-color: rgba(255, 255, 255, 0.25);
   }
 
-  .toggle-input:checked + .toggle-slider:hover {
+  .toggle-input:checked + .toggle-switch:hover {
     background-color: rgba(255, 255, 255, 0.9);
   }
 
