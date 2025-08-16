@@ -10,26 +10,30 @@ A Svelte application that aggregates YouTube RSS feeds into a clean, responsive 
 - **Smart Sorting**: Videos automatically sorted by publish date (newest first)
 - **Clean UI**: Modern, responsive design with loading indicators and error handling
 
-## Setup
+## Configuration
 
-1. **Install dependencies**:
-   ```bash
-   pnpm install
-   ```
+The app reads from a `subscriptions.yaml` file in the project root. Simply add the YouTube channel IDs you want to follow:
 
-2. **Configure your feeds**:
-   Edit `subscriptions.yaml` in the project root to include your YouTube RSS feed URLs:
-   ```yaml
-   feeds:
-     - https://www.youtube.com/feeds/videos.xml?channel_id=YOUR_CHANNEL_ID_1
-     - https://www.youtube.com/feeds/videos.xml?channel_id=YOUR_CHANNEL_ID_2
-   ```
+```yaml
+feeds:
+  - UC-lHJZR3Gqxm24_Vd_AJ5Yw
+  - UCX6OQ3DkcsbYNE6H8uQQuVA
+  - UCbRP3c757lWg9M-U7TyEkXA
+```
 
-3. **Find YouTube Channel IDs**:
-   - Go to any YouTube channel
-   - View page source (Ctrl+U or Cmd+U)
-   - Search for `"channelId":"` - the value after this is your channel ID
-   - Or use browser dev tools to inspect the page
+### How to Find Channel IDs
+
+1. **From YouTube URL**: When viewing a YouTube channel, the URL will contain the channel ID:
+   - `https://www.youtube.com/channel/UC-lHJZR3Gqxm24_Vd_AJ5Yw`
+   - The channel ID is: `UC-lHJZR3Gqxm24_Vd_AJ5Yw`
+
+2. **From Channel Page**: Look at the channel's "About" page or inspect the page source
+
+3. **From RSS Feed**: If you already have an RSS feed URL, extract the channel ID from:
+   - `https://www.youtube.com/feeds/videos.xml?channel_id=UC-lHJZR3Gqxm24_Vd_AJ5Yw`
+   - The channel ID is: `UC-lHJZR3Gqxm24_Vd_AJ5Yw`
+
+The app automatically constructs the full RSS feed URLs from these channel IDs, making your configuration much cleaner and easier to manage!
 
 ## Development
 
