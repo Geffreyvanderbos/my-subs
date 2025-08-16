@@ -5,11 +5,6 @@
     <div class="spinner-ring"></div>
   </div>
   <p class="loading-text">Loading videos...</p>
-  <div class="loading-dots">
-    <span></span>
-    <span></span>
-    <span></span>
-  </div>
 </div>
 
 <style>
@@ -69,27 +64,6 @@
     font-weight: 500;
     color: var(--text-primary);
     letter-spacing: 0.02em;
-  }
-
-  .loading-dots {
-    display: flex;
-    gap: 0.5rem;
-  }
-
-  .loading-dots span {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-    animation: pulse 1.5s ease-in-out infinite;
-  }
-
-  .loading-dots span:nth-child(2) {
-    animation-delay: 0.2s;
-  }
-
-  .loading-dots span:nth-child(3) {
-    animation-delay: 0.4s;
   }
 
   @keyframes pulse {
