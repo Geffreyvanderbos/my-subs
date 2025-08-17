@@ -2,6 +2,7 @@
   import { onMount } from 'svelte';
   import { FeedService } from '$lib/feedService';
   import VideoCard from '$lib/components/VideoCard.svelte';
+  import VideoModal from '$lib/components/VideoModal.svelte';
   import LoadingSpinner from '$lib/components/LoadingSpinner.svelte';
   import type { Video } from '$lib/types';
 
@@ -11,6 +12,10 @@
   let refreshing = false;
   let showShorts = false; // Default: hide Shorts
   
+  // Video modal state
+  let selectedVideo: Video | null = null;
+  let isModalOpen = false;
+  
   // Infinite scroll variables
   let displayedVideos: Video[] = [];
   let currentBatch = 0;
@@ -19,6 +24,16 @@
   let hasMoreVideos = true;
 
   const feedService = new FeedService();
+
+  function openVideoModal(video: Video) {
+    selectedVideo = video;
+    isModalOpen = true;
+  }
+
+  function closeVideoModal() {
+    isModalOpen = false;
+    selectedVideo = null;
+  }
 
   // Computed property to filter videos based on Shorts preference
   $: filteredVideos = showShorts 
@@ -189,7 +204,7 @@
   {:else}
     <div class="video-grid">
       {#each displayedVideos as video (video.link)}
-        <VideoCard {video} />
+        <VideoCard {video} on:openVideo={({ detail }) => openVideoModal(detail.video)} />
       {/each}
     </div>
     
@@ -207,6 +222,14 @@
         <p>Loading more videos...</p>
       </div>
     {/if}
+  {/if}
+
+  {#if selectedVideo && isModalOpen}
+    <VideoModal 
+      video={selectedVideo} 
+      isOpen={isModalOpen} 
+      on:close={closeVideoModal}
+    />
   {/if}
 </main>
 
@@ -279,12 +302,7 @@
     font-weight: 500;
   }
 
-  .video-count {
-    font-size: 0.75rem;
-    color: var(--text-muted);
-    margin-left: 0.5rem;
-    opacity: 0.8;
-  }
+
 
   .toggle-label {
     cursor: pointer;
@@ -394,30 +412,7 @@
     transform: none;
   }
 
-  .button-content {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
 
-  .refresh-icon {
-    width: 18px;
-    height: 18px;
-  }
-
-  .spinner {
-    width: 18px;
-    height: 18px;
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    border-top: 2px solid var(--bg-primary);
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-  }
-
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
 
   main {
     max-width: 1400px;
@@ -574,13 +569,7 @@
       font-size: 0.875rem;
     }
 
-    .button-content span {
-      display: none;
-    }
 
-    .button-content {
-      gap: 0;
-    }
 
     main {
       padding: 1rem;
@@ -614,8 +603,6 @@
       justify-content: center;
     }
 
-    .button-content span {
-      display: inline;
-    }
+
   }
 </style>
