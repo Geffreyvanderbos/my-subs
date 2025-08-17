@@ -14,4 +14,6 @@ export interface FeedConfig {
 export interface FeedResponse {
   videos: Video[];
   error?: string;
+  cached?: boolean;
+  cacheTimestamp?: number;
 }

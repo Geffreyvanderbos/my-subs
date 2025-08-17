@@ -2,6 +2,7 @@
   import { onMount } from 'svelte';
   import { FeedService } from '$lib/feedService';
   import VideoCard from '$lib/components/VideoCard.svelte';
+  import VideoModal from '$lib/components/VideoModal.svelte';
   import LoadingSpinner from '$lib/components/LoadingSpinner.svelte';
   import type { Video } from '$lib/types';
 
@@ -11,6 +12,14 @@
   let refreshing = false;
   let showShorts = false; // Default: hide Shorts
   
+  // Cache status
+  let isCached = false;
+  let cacheTimestamp: number | null = null;
+  
+  // Video modal state
+  let selectedVideo: Video | null = null;
+  let isModalOpen = false;
+  
   // Infinite scroll variables
   let displayedVideos: Video[] = [];
   let currentBatch = 0;
@@ -19,6 +28,16 @@
   let hasMoreVideos = true;
 
   const feedService = new FeedService();
+
+  function openVideoModal(video: Video) {
+    selectedVideo = video;
+    isModalOpen = true;
+  }
+
+  function closeVideoModal() {
+    isModalOpen = false;
+    selectedVideo = null;
+  }
 
   // Computed property to filter videos based on Shorts preference
   $: filteredVideos = showShorts 
@@ -44,11 +63,15 @@
       console.log('API response:', response);
       
       videos = response.videos;
+      isCached = response.cached || false;
+      cacheTimestamp = response.cacheTimestamp || null;
+      
       if (response.error) {
         error = response.error;
       }
       
       console.log('Videos loaded:', videos.length);
+      console.log('Data from cache:', isCached);
     } catch (err) {
       console.error('Error loading videos:', err);
       error = err instanceof Error ? err.message : 'Failed to load videos';
@@ -67,11 +90,15 @@
       console.log('Refresh response:', response);
       
       videos = response.videos;
+      isCached = response.cached || false;
+      cacheTimestamp = response.cacheTimestamp || null;
+      
       if (response.error) {
         error = response.error;
       }
       
       console.log('Videos refreshed:', videos.length);
+      console.log('Data from cache:', isCached);
     } catch (err) {
       console.error('Error refreshing videos:', err);
       error = err instanceof Error ? err.message : 'Failed to refresh videos';
@@ -160,6 +187,15 @@
         >
           {refreshing ? 'Refreshing...' : 'Refresh'}
         </button>
+        
+        {#if isCached && cacheTimestamp}
+          <div class="cache-status">
+            <span class="cache-indicator">📦</span>
+            <span class="cache-text">Cached</span>
+            <span class="cache-time">{new Date(cacheTimestamp).toLocaleTimeString()}</span>
+            <span class="cache-expiry">Expires in {Math.max(0, Math.floor((cacheTimestamp + (15 * 60 * 1000) - Date.now()) / 60000))}m</span>
+          </div>
+        {/if}
       </div>
     </div>
   </div>
@@ -189,7 +225,7 @@
   {:else}
     <div class="video-grid">
       {#each displayedVideos as video (video.link)}
-        <VideoCard {video} />
+        <VideoCard {video} on:openVideo={({ detail }) => openVideoModal(detail.video)} />
       {/each}
     </div>
     
@@ -207,6 +243,14 @@
         <p>Loading more videos...</p>
       </div>
     {/if}
+  {/if}
+
+  {#if selectedVideo && isModalOpen}
+    <VideoModal 
+      video={selectedVideo} 
+      isOpen={isModalOpen} 
+      on:close={closeVideoModal}
+    />
   {/if}
 </main>
 
@@ -277,13 +321,6 @@
     font-size: 0.875rem;
     color: var(--text-secondary);
     font-weight: 500;
-  }
-
-  .video-count {
-    font-size: 0.75rem;
-    color: var(--text-muted);
-    margin-left: 0.5rem;
-    opacity: 0.8;
   }
 
   .toggle-label {
@@ -394,29 +431,42 @@
     transform: none;
   }
 
-  .button-content {
+  .cache-status {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    font-weight: 400;
+    letter-spacing: 0.01em;
+    padding: 0.5rem 0.75rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
   }
 
-  .refresh-icon {
-    width: 18px;
-    height: 18px;
+  .cache-indicator {
+    font-size: 1rem;
+    flex-shrink: 0;
   }
 
-  .spinner {
-    width: 18px;
-    height: 18px;
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    border-top: 2px solid var(--bg-primary);
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
+  .cache-text {
+    font-weight: 500;
+    color: var(--text-secondary);
   }
 
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+  .cache-time {
+    font-weight: 600;
+    color: var(--text-primary);
+    font-family: monospace;
+    font-size: 0.8rem;
+  }
+
+  .cache-expiry {
+    font-weight: 500;
+    color: var(--accent-secondary);
+    font-size: 0.75rem;
+    opacity: 0.8;
   }
 
   main {
@@ -472,7 +522,6 @@
   }
 
   .retry-button:hover {
-    transform: translateY(-1px);
     box-shadow: 0 4px 16px rgba(255, 255, 255, 0.2);
   }
 
@@ -515,7 +564,8 @@
   .video-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-    gap: 2rem;
+    align-items: start;
+    gap: 3rem;
     padding: 1rem 0;
   }
 
@@ -540,7 +590,6 @@
     background: rgba(255, 255, 255, 0.12);
     border-color: rgba(255, 255, 255, 0.18);
     color: var(--text-primary);
-    transform: translateY(-1px);
   }
 
   .loading-more {
@@ -572,14 +621,6 @@
     .refresh-button {
       padding: 0.625rem 1.25rem;
       font-size: 0.875rem;
-    }
-
-    .button-content span {
-      display: none;
-    }
-
-    .button-content {
-      gap: 0;
     }
 
     main {
@@ -614,8 +655,6 @@
       justify-content: center;
     }
 
-    .button-content span {
-      display: inline;
-    }
+
   }
 </style>

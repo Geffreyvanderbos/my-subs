@@ -1,7 +1,10 @@
 <script lang="ts">
+  import { createEventDispatcher } from 'svelte';
   import type { Video } from '../types';
 
   export let video: Video;
+
+  const dispatch = createEventDispatcher();
 
   function formatDate(date: Date | string): string {
     try {
@@ -58,14 +61,16 @@
       return 'Unknown date';
     }
   }
+
+  function openVideo() {
+    dispatch('openVideo', { video });
+  }
 </script>
 
-<a 
-  href={video.link} 
-  target="_blank" 
-  rel="noopener noreferrer"
-  class="video-card-link"
-  aria-label="Watch {video.title} on YouTube"
+<button 
+  class="video-card-button"
+  on:click={openVideo}
+  aria-label="Watch {video.title}"
 >
   <div class="video-card">
     <div class="thumbnail-container">
@@ -92,7 +97,7 @@
       <div class="video-meta">
         <p class="channel-name">
           <svg class="channel-icon" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
           </svg>
           {video.channel}
         </p>
@@ -106,15 +111,21 @@
       </div>
     </div>
   </div>
-</a>
+</button>
 
 <style>
-  .video-card-link {
+  .video-card-button {
     text-decoration: none;
     color: inherit;
     display: block;
     position: relative;
     overflow: hidden;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    font-family: inherit;
+    font-size: inherit;
   }
 
   .video-card {
@@ -132,7 +143,7 @@
   }
 
   .thumbnail {
-    border-radius: 30px;
+    border-radius: 24px;
     position: absolute;
     top: 0;
     left: 0;
@@ -162,7 +173,7 @@
     justify-content: center;
   }
 
-  .video-card-link:hover .thumbnail-overlay {
+  .video-card-button:hover .thumbnail-overlay {
     opacity: 1;
   }
 
@@ -180,7 +191,7 @@
     transition: transform 0.164s var(--card-easing);
   }
 
-  .video-card-link:hover .play-button {
+  .video-card-button:hover .play-button {
     transform: scale(1);
   }
 
@@ -200,6 +211,7 @@
     font-weight: 600;
     line-height: 1.4;
     color: var(--text-primary);
+    text-align: left;
   }
 
   .video-meta {
@@ -242,7 +254,7 @@
 
   /* Responsive adjustments */
   @media (max-width: 768px) {
-    .video-card-link {
+    .video-card-button {
       border-radius: 16px;
     }
 
@@ -266,7 +278,7 @@
   }
 
   @media (max-width: 480px) {
-    .video-card-link:hover {
+    .video-card-button:hover {
       transform: translateY(-4px) scale(1.01);
     }
 
