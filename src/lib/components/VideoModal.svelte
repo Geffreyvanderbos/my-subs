@@ -1,11 +1,22 @@
 <script lang="ts">
-  import { createEventDispatcher, onMount } from 'svelte';
+  import { createEventDispatcher, onMount, tick } from 'svelte';
   import type { Video } from '../types';
 
   export let video: Video;
   export let isOpen: boolean = false;
 
   const dispatch = createEventDispatcher();
+  
+  let shouldAnimate = false;
+  
+  $: if (isOpen) {
+    // Small delay to ensure DOM is ready before applying animation
+    setTimeout(() => {
+      shouldAnimate = true;
+    }, 10);
+  } else {
+    shouldAnimate = false;
+  }
 
   let modalElement: HTMLDivElement;
   let videoId: string = '';
@@ -69,7 +80,7 @@
     tabindex="-1"
     bind:this={modalElement}
   >
-    <div class="modal-container" class:open={isOpen}>
+        <div class="modal-container" class:open={shouldAnimate}>
       <div class="modal-header">
         <div class="modal-title">
           <h2 id="modal-title">{video.title}</h2>
@@ -148,7 +159,6 @@
     justify-content: center;
     padding: 2rem;
     opacity: 0;
-    transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .modal-backdrop.open {
@@ -163,9 +173,9 @@
     max-height: 90vh;
     width: 100%;
     overflow: hidden;
-    transform: scale(0.9) translateY(20px);
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    /* border: 1px solid rgba(255, 255, 255, 0.1); */
+    opacity: 0;
+    transform: scale(0.95) translateY(5px);
+    transition: opacity 0.1s cubic-bezier(0, 0.55, 0.45, 1), transform 0.4s cubic-bezier(0, 0.55, 0.45, 1);
     box-shadow: 
     inset 1px 1px 0 0 rgba(255, 255, 255, 0.15), 
     inset -1px -1px 0 0 rgba(255, 255, 255, 0.07);
@@ -174,6 +184,7 @@
   
 
   .modal-container.open {
+    opacity: 1;
     transform: scale(1) translateY(0);
   }
 
