@@ -12,6 +12,10 @@
   let refreshing = false;
   let showShorts = false; // Default: hide Shorts
   
+  // Cache status
+  let isCached = false;
+  let cacheTimestamp: number | null = null;
+  
   // Video modal state
   let selectedVideo: Video | null = null;
   let isModalOpen = false;
@@ -59,11 +63,15 @@
       console.log('API response:', response);
       
       videos = response.videos;
+      isCached = response.cached || false;
+      cacheTimestamp = response.cacheTimestamp || null;
+      
       if (response.error) {
         error = response.error;
       }
       
       console.log('Videos loaded:', videos.length);
+      console.log('Data from cache:', isCached);
     } catch (err) {
       console.error('Error loading videos:', err);
       error = err instanceof Error ? err.message : 'Failed to load videos';
@@ -82,11 +90,15 @@
       console.log('Refresh response:', response);
       
       videos = response.videos;
+      isCached = response.cached || false;
+      cacheTimestamp = response.cacheTimestamp || null;
+      
       if (response.error) {
         error = response.error;
       }
       
       console.log('Videos refreshed:', videos.length);
+      console.log('Data from cache:', isCached);
     } catch (err) {
       console.error('Error refreshing videos:', err);
       error = err instanceof Error ? err.message : 'Failed to refresh videos';
@@ -175,6 +187,15 @@
         >
           {refreshing ? 'Refreshing...' : 'Refresh'}
         </button>
+        
+        {#if isCached && cacheTimestamp}
+          <div class="cache-status">
+            <span class="cache-indicator">📦</span>
+            <span class="cache-text">Cached</span>
+            <span class="cache-time">{new Date(cacheTimestamp).toLocaleTimeString()}</span>
+            <span class="cache-expiry">Expires in {Math.max(0, Math.floor((cacheTimestamp + (15 * 60 * 1000) - Date.now()) / 60000))}m</span>
+          </div>
+        {/if}
       </div>
     </div>
   </div>
@@ -410,6 +431,44 @@
     transform: none;
   }
 
+  .cache-status {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    font-weight: 400;
+    letter-spacing: 0.01em;
+    padding: 0.5rem 0.75rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .cache-indicator {
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+
+  .cache-text {
+    font-weight: 500;
+    color: var(--text-secondary);
+  }
+
+  .cache-time {
+    font-weight: 600;
+    color: var(--text-primary);
+    font-family: monospace;
+    font-size: 0.8rem;
+  }
+
+  .cache-expiry {
+    font-weight: 500;
+    color: var(--accent-secondary);
+    font-size: 0.75rem;
+    opacity: 0.8;
+  }
+
   main {
     max-width: 1400px;
     margin: 0 auto;
@@ -506,7 +565,7 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
     align-items: start;
-    gap: 2.5rem;
+    gap: 3rem;
     padding: 1rem 0;
   }
 
