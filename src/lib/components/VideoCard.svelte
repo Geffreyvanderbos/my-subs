@@ -143,7 +143,7 @@
   }
 
   .thumbnail {
-    border-radius: 30px;
+    border-radius: 24px;
     position: absolute;
     top: 0;
     left: 0;

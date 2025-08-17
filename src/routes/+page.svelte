@@ -302,8 +302,6 @@
     font-weight: 500;
   }
 
-
-
   .toggle-label {
     cursor: pointer;
     user-select: none;
@@ -412,8 +410,6 @@
     transform: none;
   }
 
-
-
   main {
     max-width: 1400px;
     margin: 0 auto;
@@ -467,7 +463,6 @@
   }
 
   .retry-button:hover {
-    transform: translateY(-1px);
     box-shadow: 0 4px 16px rgba(255, 255, 255, 0.2);
   }
 
@@ -510,7 +505,8 @@
   .video-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-    gap: 2rem;
+    align-items: start;
+    gap: 2.5rem;
     padding: 1rem 0;
   }
 
@@ -535,7 +531,6 @@
     background: rgba(255, 255, 255, 0.12);
     border-color: rgba(255, 255, 255, 0.18);
     color: var(--text-primary);
-    transform: translateY(-1px);
   }
 
   .loading-more {
@@ -568,8 +563,6 @@
       padding: 0.625rem 1.25rem;
       font-size: 0.875rem;
     }
-
-
 
     main {
       padding: 1rem;
