@@ -82,9 +82,7 @@
             on:click={openYouTubePage}
             title="Open on YouTube"
           >
-            <svg viewBox="0 0 24 24" fill="currentColor">
-              <path d="M10 6v2h2v2h2V8h2V6h-2V4h-2v2h-2zM9 9V7H7v2h2zm0 0v2h2V9H9zm0 0H7v2h2V9zm2 2h2v-2h-2v2zm2 0h2v-2h-2v2zm2 0h2v-2h-2v2zm-6 2h2v-2H7v2zm2 0h2v-2H9v2zm2 0h2v-2h-2v2zm2 0h2v-2h-2v2zm2 0h2v-2h-2v2zm-6 2h2v-2H7v2zm2 0h2v-2H9v2zm2 0h2v-2h-2v2zm2 0h2v-2h-2v2zm2 0h2v-2h-2v2zm-6 2h2v-2H7v2zm2 0h2v-2H9v2zm2 0h2v-2h-2v2zm2 0h2v-2h-2v2zm2 0h2v-2h-2v2z"/>
-            </svg>
+          <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>YouTube</title><path fill="currentColor" d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
             YouTube
           </button>
           
@@ -142,8 +140,8 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(20px);
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(20px) saturate(0.7);
     z-index: 10000;
     display: flex;
     align-items: center;
@@ -158,17 +156,22 @@
   }
 
   .modal-container {
-    background: var(--bg-primary);
-    border-radius: 24px;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
-    max-width: 90vw;
+    background: rgba(15, 15, 15, 0.8);
+    backdrop-filter: blur(20px);
+    border-radius: 32px;
+    max-width: 96vw;
     max-height: 90vh;
     width: 100%;
     overflow: hidden;
     transform: scale(0.9) translateY(20px);
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    /* border: 1px solid rgba(255, 255, 255, 0.1); */
+    box-shadow: 
+    inset 1px 1px 0 0 rgba(255, 255, 255, 0.15), 
+    inset -1px -1px 0 0 rgba(255, 255, 255, 0.07);
   }
+
+  
 
   .modal-container.open {
     transform: scale(1) translateY(0);
@@ -179,17 +182,16 @@
     align-items: flex-start;
     justify-content: space-between;
     padding: 1.5rem 2rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
     background: rgba(255, 255, 255, 0.02);
   }
 
   .modal-title h2 {
     margin: 0 0 0.5rem 0;
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     font-weight: 700;
     color: var(--text-primary);
     line-height: 1.3;
-    max-width: 600px;
   }
 
   .channel-name {
@@ -223,7 +225,6 @@
   }
 
   .youtube-link-button:hover {
-    transform: translateY(-2px);
     box-shadow: 0 8px 25px rgba(255, 0, 0, 0.3);
   }
 
@@ -267,7 +268,7 @@
     width: 100%;
     height: 0;
     padding-bottom: 56.25%; /* 16:9 aspect ratio */
-    margin-bottom: 2rem;
+    /* margin-bottom: 2rem; */
     border-radius: 16px;
     overflow: hidden;
     background: #000;
