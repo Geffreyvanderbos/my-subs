@@ -1,7 +1,7 @@
 services:
-  my-yt:
+  my-subs:
     build: .
-    container_name: my-yt
+    container_name: my-subs
     restart: unless-stopped
     ports:
       - "8080:3000"
@@ -14,8 +14,8 @@ services:
       retries: 3
       start_period: 40s
     networks:
-      - my-yt-network
+      - my-subs-network
 
 networks:
-  my-yt-network:
+  my-subs-network:
     driver: bridge

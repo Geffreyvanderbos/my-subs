@@ -121,7 +121,7 @@
 </script>
 
 <svelte:head>
-  <title>My Subscriptions - Privacy-focused, no-algorithm YouTube feed</title>
+  <title>My Subscriptions - No-algorithm YouTube feed</title>
 </svelte:head>
 
 <nav class="navbar">
@@ -129,7 +129,7 @@
     <div class="nav-content">
       <div class="nav-brand">
         <h1 class="nav-title">My Subscriptions</h1>
-        <p class="nav-subtitle">The no-algorithm YouTube feed</p>
+        <p class="nav-subtitle">No-algorithm YouTube feed</p>
       </div>
       
       <div class="nav-controls">
